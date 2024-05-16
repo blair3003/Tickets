@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Tickets.Data;
 using Tickets.Data.Models;
 
 namespace Tickets.Tests
@@ -23,10 +25,11 @@ namespace Tickets.Tests
             var result = await _env.UserManager.CreateAsync(user, password);
             Assert.True(result.Succeeded);
 
-            user = await _env.UserManager.FindByNameAsync(userName);
-            Assert.NotNull(user);
-            Assert.Equal(userName, user.UserName);
-            Assert.Equal(email, user.Email);
+            using var verificationContext = _env.CreateContext();
+            var verifiedUser = await verificationContext.Users.SingleOrDefaultAsync(u => u.UserName == userName);
+            Assert.NotNull(verifiedUser);
+            Assert.Equal(userName, verifiedUser.UserName);
+            Assert.Equal(email, verifiedUser.Email);
         }
 
         [Fact]
@@ -78,10 +81,11 @@ namespace Tickets.Tests
             var addClaim = await _env.UserManager.AddClaimAsync(user, new Claim("IsAdmin", "true"));
             Assert.True(addClaim.Succeeded);
 
-            var adminUser = await _env.UserManager.FindByNameAsync(userName);
+            using var verificationContext = _env.CreateContext();
+            var adminUser = await verificationContext.Users.SingleOrDefaultAsync(u => u.UserName == userName);
             Assert.NotNull(adminUser);
 
-            var adminUserClaims = await _env.UserManager.GetClaimsAsync(adminUser);
+            var adminUserClaims = await _env.UserManager.GetClaimsAsync((ApplicationUser) adminUser);
             Assert.Contains(adminUserClaims, c => c.Type == "IsAdmin" && bool.Parse(c.Value) == true);
         }
     }
