@@ -17,12 +17,12 @@ namespace Tickets.Data
             return ticket;
         }
 
-        public Task<Ticket> AddAsync(Ticket ticket)
+        public Task<Ticket?> AddAsync(Ticket ticket)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Ticket> DeleteAsync(int id)
+        public Task<Ticket?> DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -32,7 +32,7 @@ namespace Tickets.Data
             throw new NotImplementedException();
         }
 
-        public Task<Ticket> UpdateAsync(int id, Ticket ticket)
+        public Task<Ticket?> UpdateAsync(int id, Ticket ticket)
         {
             throw new NotImplementedException();
         }
