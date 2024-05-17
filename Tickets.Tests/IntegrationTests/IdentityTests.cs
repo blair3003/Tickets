@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Tickets.Data;
 using Tickets.Data.Models;
 
-namespace Tickets.Tests
+namespace Tickets.Tests.IntegrationTests
 {
     public class IdentityTests(TestEnvironment env) : IClassFixture<TestEnvironment>
     {
@@ -85,7 +85,7 @@ namespace Tickets.Tests
             var adminUser = await verificationContext.Users.SingleOrDefaultAsync(u => u.UserName == userName);
             Assert.NotNull(adminUser);
 
-            var adminUserClaims = await _env.UserManager.GetClaimsAsync((ApplicationUser) adminUser);
+            var adminUserClaims = await _env.UserManager.GetClaimsAsync((ApplicationUser)adminUser);
             Assert.Contains(adminUserClaims, c => c.Type == "IsAdmin" && bool.Parse(c.Value) == true);
         }
     }

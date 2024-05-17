@@ -6,15 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Tickets.Tests
+namespace Tickets.Tests.IntegrationTests
 {
     public class TestEnvironment : IDisposable
     {
         private readonly SqliteConnection _sqliteConnection;
         private readonly ApplicationDbContext _identityDbContext;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationUser _testUser;
 
         public UserManager<ApplicationUser> UserManager => _userManager;
+        public ApplicationUser TestUser => _testUser;
 
         public TestEnvironment()
         {
@@ -41,6 +43,8 @@ namespace Tickets.Tests
             _identityDbContext.Database.EnsureCreated();
 
             _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            _testUser = CreateUserAsync().GetAwaiter().GetResult();
         }
 
         public ApplicationDbContext CreateContext()
@@ -51,22 +55,28 @@ namespace Tickets.Tests
             return new ApplicationDbContext(options);
         }
 
-        public async Task<IdentityResult> CreateUser(string id)
+        public async Task<ApplicationUser> CreateUserAsync()
         {
-
-            string userName = "Test";
-            string email = "test@test.com";
-            string password = "Abc!23";
+            var userName = "TestUser";
+            var email = "test@user.com";
+            var password = "Abc!23";
 
             var user = new ApplicationUser
             {
-                Id = id,
                 UserName = userName,
                 Email = email
             };
 
-            var createUser = await _userManager.CreateAsync(user, password);
-            return createUser;
+            var createUserResult = await _userManager.CreateAsync(user, password);
+
+            if (createUserResult.Succeeded)
+            {
+                return user;
+            }
+            else
+            {
+                throw new InvalidOperationException("Failed to create Test User.");
+            }
         }
 
         public void Dispose()

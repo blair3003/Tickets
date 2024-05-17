@@ -1,4 +1,5 @@
-﻿using Tickets.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Tickets.Data.Models;
 
 namespace Tickets.Data
 {
@@ -11,30 +12,64 @@ namespace Tickets.Data
             _context = context;
         }
 
+        public async Task<IEnumerable<Ticket>> GetAllAsync()
+        {
+            var allTickets = await _context.Tickets.ToListAsync();
+            return allTickets;
+        }
+
         public async Task<Ticket?> GetByIdAsync(int id)
         {
             var ticket = await _context.Tickets.FindAsync(id);
             return ticket;
         }
 
-        public Task<Ticket?> AddAsync(Ticket ticket)
+        public async Task<Ticket?> AddAsync(Ticket ticket)
         {
-            throw new NotImplementedException();
+            ticket.Created = DateTime.UtcNow;
+            ticket.Updated = DateTime.UtcNow;
+
+            await _context.Tickets.AddAsync(ticket);
+            await _context.SaveChangesAsync();
+            return ticket;
         }
 
-        public Task<Ticket?> DeleteAsync(int id)
+        public async Task<Ticket?> UpdateAsync(int id, Ticket ticket)
         {
-            throw new NotImplementedException();
+            var existingTicket = await _context.Tickets.FindAsync(id);
+
+            if (existingTicket == null)
+            {
+                return null;
+            }
+
+            existingTicket.Summary = ticket.Summary;
+            existingTicket.Description = ticket.Description;
+            existingTicket.Category = ticket.Category;
+            existingTicket.Status = ticket.Status;
+            existingTicket.AssigneeId = ticket.AssigneeId;
+            existingTicket.ReporterId = ticket.ReporterId;
+            existingTicket.DueDate = ticket.DueDate;
+            existingTicket.Priority = ticket.Priority;
+
+            existingTicket.Updated = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+            return existingTicket;
         }
 
-        public Task<IEnumerable<Ticket>> GetAllAsync()
+        public async Task<Ticket?> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
-        }
+            var ticket = await _context.Tickets.FindAsync(id);
 
-        public Task<Ticket?> UpdateAsync(int id, Ticket ticket)
-        {
-            throw new NotImplementedException();
+            if (ticket == null)
+            {
+                return null;
+            }
+
+            _context.Tickets.Remove(ticket);
+            await _context.SaveChangesAsync();
+            return ticket;
         }
     }
 }
