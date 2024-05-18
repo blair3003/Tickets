@@ -38,6 +38,25 @@ namespace Tickets.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task GetAllAsync_WhenNoTicketsExist_ReturnsEmptyList()
+        {
+            using (var context = _env.CreateContext())
+            {
+                context.Tickets.RemoveRange(context.Tickets);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _env.CreateContext())
+            {
+                var repository = new TicketRepository(context);
+                var result = await repository.GetAllAsync();
+
+                Assert.NotNull(result);
+                Assert.Empty(result);
+            }
+        }
+
+        [Fact]
         public async Task GetByIdAsync_ReturnsTicket()
         {
             var ticket = new Ticket
@@ -61,6 +80,28 @@ namespace Tickets.Tests.IntegrationTests
                 Assert.NotNull(result);
                 Assert.Equal("Test Ticket", result.Summary);
                 Assert.Equal(_env.TestUser.Id, result.ReporterId);
+            }
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_WhenTicketDoesntExist_ReturnsNull()
+        {
+            using (var context = _env.CreateContext())
+            {
+                var ticketToRemove = await context.Tickets.FindAsync(44);
+                if (ticketToRemove != null)
+                {
+                    context.Tickets.Remove(ticketToRemove);
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            using (var context = _env.CreateContext())
+            {
+                var repository = new TicketRepository(context);
+                var result = await repository.GetByIdAsync(44);
+
+                Assert.Null(result);
             }
         }
 
@@ -127,6 +168,66 @@ namespace Tickets.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task UpdateAsync_WhenTicketIdMismatch_ReturnsNull()
+        {
+            var ticket = new Ticket
+            {
+                TicketId = 66,
+                Summary = "Existing Ticket",
+                ReporterId = _env.TestUser.Id
+            };
+
+            using (var context = _env.CreateContext())
+            {
+                context.Tickets.Add(ticket);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _env.CreateContext())
+            {
+                var repository = new TicketRepository(context);
+
+                var ticketToUpdate = await context.Tickets.FindAsync(66);
+                Assert.NotNull(ticketToUpdate);
+
+                ticketToUpdate.Summary = "Updated Ticket";
+                var orginalUpdatedDate = ticketToUpdate.Updated;
+
+                var result = await repository.UpdateAsync(6, ticketToUpdate);
+
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WhenTicketDoesNotExist_ReturnsNull()
+        {
+            var ticket = new Ticket
+            {
+                TicketId = 666,
+                Summary = "Non-existent Ticket",
+                ReporterId = _env.TestUser.Id
+            };
+
+            using (var context = _env.CreateContext())
+            {
+                var ticketToRemove = await context.Tickets.FindAsync(666);
+                if (ticketToRemove != null)
+                {
+                    context.Tickets.Remove(ticketToRemove);
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            using (var context = _env.CreateContext())
+            {
+                var repository = new TicketRepository(context);
+                var result = await repository.UpdateAsync(666, ticket);
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
         public async Task DeleteAsync_RemovesExistingTicket()
         {
             var ticket = new Ticket
@@ -154,6 +255,28 @@ namespace Tickets.Tests.IntegrationTests
             {
                 var deletedTicket = await context.Tickets.FindAsync(7);
                 Assert.Null(deletedTicket);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteAsync_WhenTicketDoesntExist_ReturnsNull()
+        {
+            using (var context = _env.CreateContext())
+            {
+                var ticketToRemove = await context.Tickets.FindAsync(777);
+                if (ticketToRemove != null)
+                {
+                    context.Tickets.Remove(ticketToRemove);
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            using (var context = _env.CreateContext())
+            {
+                var repository = new TicketRepository(context);
+
+                var result = await repository.DeleteAsync(777);
+                Assert.Null(result);
             }
         }
     }

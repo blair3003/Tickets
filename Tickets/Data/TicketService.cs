@@ -1,8 +1,10 @@
-﻿using Tickets.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Net.Sockets;
+using Tickets.Data.Models;
 
 namespace Tickets.Data
 {
-    public class TicketService : ITicketService
+    public class TicketService
     {
         private readonly ITicketRepository _repository;
 
@@ -17,24 +19,28 @@ namespace Tickets.Data
             return tickets;
         }
 
-        public Task<Ticket?> GetTicketsByIdAsync(int id)
+        public async Task<Ticket?> GetTicketByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var ticket = await _repository.GetByIdAsync(id);
+            return ticket;
         }
 
-        public Task<Ticket?> AddTicketAsync(Ticket ticket)
+        public async Task<Ticket?> AddTicketAsync(Ticket ticket)
         {
-            throw new NotImplementedException();
+            var newTicket = await _repository.AddAsync(ticket);
+            return newTicket;
         }
 
-        public Task<Ticket?> UpdateTicketAsync(int id, Ticket ticket)
+        public async Task<Ticket?> UpdateTicketAsync(int id, Ticket ticket)
         {
-            throw new NotImplementedException();
+            var updatedTicket = await _repository.UpdateAsync(id, ticket);
+            return updatedTicket;
         }
 
-        public Task<Ticket?> DeleteTicketAsync(int id)
+        public async Task<Ticket?> DeleteTicketAsync(int id)
         {
-            throw new NotImplementedException();
+            var deletedTicket = await _repository.DeleteAsync(id);
+            return deletedTicket;
         }
     }
 }

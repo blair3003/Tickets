@@ -36,6 +36,11 @@ namespace Tickets.Data
 
         public async Task<Ticket?> UpdateAsync(int id, Ticket ticket)
         {
+            if (id != ticket.TicketId)
+            {
+                return null;
+            }
+
             var existingTicket = await _context.Tickets.FindAsync(id);
 
             if (existingTicket == null)
