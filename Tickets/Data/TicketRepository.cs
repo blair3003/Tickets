@@ -26,6 +26,16 @@ namespace Tickets.Data
 
         public async Task<Ticket?> AddAsync(Ticket ticket)
         {
+            var users = await _context.Users
+                .Where(u => u.Id == ticket.ReporterId || u.Id == ticket.AssigneeId)
+                .ToListAsync();
+
+            if (users.All(u => u.Id != ticket.ReporterId) ||
+                (ticket.AssigneeId != null && users.All(u => u.Id != ticket.AssigneeId)))
+            {
+                return null;
+            }
+
             ticket.Created = DateTime.UtcNow;
             ticket.Updated = DateTime.UtcNow;
 
@@ -37,6 +47,16 @@ namespace Tickets.Data
         public async Task<Ticket?> UpdateAsync(int id, Ticket ticket)
         {
             if (id != ticket.TicketId)
+            {
+                return null;
+            }
+
+            var users = await _context.Users
+                .Where(u => u.Id == ticket.ReporterId || u.Id == ticket.AssigneeId)
+                .ToListAsync();
+
+            if (users.All(u => u.Id != ticket.ReporterId) ||
+                (ticket.AssigneeId != null && users.All(u => u.Id != ticket.AssigneeId)))
             {
                 return null;
             }

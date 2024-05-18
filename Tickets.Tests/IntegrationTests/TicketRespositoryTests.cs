@@ -134,6 +134,32 @@ namespace Tickets.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task AddAsync_WhenReporterDoesntExist_ReturnsNull()
+        {
+            var ticket = new Ticket
+            {
+                TicketId = 55,
+                Summary = "New Ticket",
+                ReporterId = "55"
+            };
+
+            using (var context = _env.CreateContext())
+            {
+                var repository = new TicketRepository(context);
+                var newTicket = await repository.AddAsync(ticket);
+
+                Assert.Null(newTicket);
+            }
+
+            using (var context = _env.CreateContext())
+            {
+                var result = await context.Tickets.FindAsync(55);
+
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
         public async Task UpdateAsync_ModifiesExistingTicket()
         {
             var ticket = new Ticket
@@ -223,6 +249,37 @@ namespace Tickets.Tests.IntegrationTests
             {
                 var repository = new TicketRepository(context);
                 var result = await repository.UpdateAsync(666, ticket);
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WhenReporterDoesntExist_ReturnsNull()
+        {
+            var ticket = new Ticket
+            {
+                TicketId = 6666,
+                Summary = "Existing Ticket",
+                ReporterId = _env.TestUser.Id
+            };
+
+            using (var context = _env.CreateContext())
+            {
+                context.Tickets.Add(ticket);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _env.CreateContext())
+            {
+                var repository = new TicketRepository(context);
+
+                var ticketToUpdate = await context.Tickets.FindAsync(6666);
+                Assert.NotNull(ticketToUpdate);
+
+                ticketToUpdate.ReporterId = "Non-existant Reporter ID";
+
+                var result = await repository.UpdateAsync(6666, ticketToUpdate);
+
                 Assert.Null(result);
             }
         }

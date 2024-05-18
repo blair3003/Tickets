@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FE9B25E0-FE3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6CDB8122-7C8D-4BE4-A609-85B3184046A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tickets.Tests", "Tickets.Tests\Tickets.Tests.csproj", "{4BA8554F-A0D8-4AA3-9A0B-813F57F85AA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tickets.Tests", "Tickets.Tests\Tickets.Tests.csproj", "{4BA8554F-A0D8-4AA3-9A0B-813F57F85AA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
