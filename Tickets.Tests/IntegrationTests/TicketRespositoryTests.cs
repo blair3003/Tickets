@@ -30,7 +30,7 @@ namespace Tickets.Tests.IntegrationTests
                 var result = await repository.GetAllAsync();
 
                 Assert.NotNull(result);
-                Assert.True(result.Count() >= 3);
+                Assert.True(result.Count >= 3);
                 Assert.Contains(result, t => t.Summary == "Ticket 1");
                 Assert.Contains(result, t => t.Summary == "Ticket 2");
                 Assert.Contains(result, t => t.Summary == "Ticket 3");

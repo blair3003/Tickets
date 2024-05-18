@@ -12,7 +12,7 @@ namespace Tickets.Data
             _context = context;
         }
 
-        public async Task<IEnumerable<Ticket>> GetAllAsync()
+        public async Task<List<Ticket>> GetAllAsync()
         {
             var allTickets = await _context.Tickets.ToListAsync();
             return allTickets;

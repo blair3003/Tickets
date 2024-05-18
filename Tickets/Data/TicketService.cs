@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Net.Sockets;
-using Tickets.Data.Models;
+﻿using Tickets.Data.Models;
 
 namespace Tickets.Data
 {
@@ -13,7 +11,7 @@ namespace Tickets.Data
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Ticket>> GetAllTicketsAsync()
+        public async Task<List<Ticket>> GetAllTicketsAsync()
         {
             var tickets = await _repository.GetAllAsync();
             return tickets;

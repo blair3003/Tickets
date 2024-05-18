@@ -31,7 +31,7 @@ namespace Tickets.Tests.UnitTests
             var result = await ticketService.GetAllTicketsAsync();
 
             Assert.NotNull(result);
-            Assert.Equal(3, result.Count());
+            Assert.Equal(3, result.Count);
             Assert.Contains(result, t => t.Summary == "Ticket 1");
             Assert.Contains(result, t => t.Summary == "Ticket 2");
             Assert.Contains(result, t => t.Summary == "Ticket 3");
