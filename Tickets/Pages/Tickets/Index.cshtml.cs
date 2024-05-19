@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
@@ -9,19 +10,22 @@ namespace Tickets.Pages.Tickets
     public class IndexModel : PageModel
     {
         private readonly TicketService _ticketService;
+        private readonly IAuthorizationService _authService;
 
         public List<Ticket> Tickets { get; set; } = [];
 
-        public IndexModel(TicketService ticketService)
+        public IndexModel(TicketService ticketService, IAuthorizationService authService)
         {
             _ticketService = ticketService;
+            _authService = authService;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var isAdmin = User.Claims.Any(c => c.Type == "IsAdmin" && bool.Parse(c.Value) == true);
+            var canViewAllTicketsCheck = await _authService.AuthorizeAsync(User, "CanViewAllTickets");
+            var canViewAllTickets = canViewAllTicketsCheck.Succeeded;
 
-            if (isAdmin)
+            if (canViewAllTickets)
             {
                 Tickets = await _ticketService.GetAllTicketsAsync();
             }

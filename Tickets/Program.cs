@@ -8,6 +8,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(
+        "CanViewAllTickets",
+        policyBuilder => policyBuilder.RequireClaim("IsAdmin", "true"))
+    .AddPolicy(
+        "CanDeleteTicket",
+        policyBuilder => policyBuilder.RequireClaim("IsAdmin", "true"))
+    .AddPolicy(
+        "CanEditTicket",
+        policyBuilder => policyBuilder.RequireClaim("IsAdmin", "true"));
+
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<TicketService>();
 builder.Services.AddRazorPages();
@@ -33,6 +45,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.MapRazorPages().RequireAuthorization();
 
 app.Run();

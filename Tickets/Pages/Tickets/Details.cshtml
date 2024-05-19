@@ -71,7 +71,13 @@
             @Html.DisplayFor(model => model.Ticket!.Updated)
         </dd>
     </dl>
-    <a asp-page="./Delete" asp-route-TicketId="@Model.TicketId" class="btn btn-danger">Delete Ticket</a>
-    <a asp-page="./Edit" asp-route-TicketId="@Model.TicketId" class="btn btn-secondary">Edit Ticket</a>
+    @if (Model.CanDeleteTicket)
+    {
+        <a asp-page="./Delete" asp-route-TicketId="@Model.TicketId" class="btn btn-danger">Delete Ticket</a>
+    }
+    @if (Model.CanEditTicket)
+    {
+        <a asp-page="./Edit" asp-route-TicketId="@Model.TicketId" class="btn btn-secondary">Edit Ticket</a>
+    }
     <a asp-page="./Index" class="btn btn-primary">Back to List</a>
 </div>

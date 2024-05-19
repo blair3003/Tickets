@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Tickets.Data;
 
 namespace Tickets.Pages.Tickets
 {
+    [Authorize("CanDeleteTicket")]
     public class DeleteModel : PageModel
     {
         private readonly TicketService _ticketService;

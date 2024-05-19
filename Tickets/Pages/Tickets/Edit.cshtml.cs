@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Tickets.Data;
@@ -5,6 +6,7 @@ using Tickets.Data.Models;
 
 namespace Tickets.Pages.Tickets
 {
+    [Authorize("CanEditTicket")]
     public class EditModel : PageModel
     {
         private readonly TicketService _ticketService;
