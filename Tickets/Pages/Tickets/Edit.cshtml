@@ -1,0 +1,57 @@
+﻿@page "/Tickets/{TicketId:int}/Edit"
+@model Tickets.Pages.Tickets.EditModel
+@{
+    ViewData["Title"] = $"Update Ticket #{Model.TicketId}";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Input.Summary"></label>
+        <input asp-for="Input.Summary" class="form-control" />
+        <span asp-validation-for="Input.Summary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Description"></label>
+        <textarea asp-for="Input.Description" class="form-control"></textarea>
+        <span asp-validation-for="Input.Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Category"></label>
+        <input asp-for="Input.Category" class="form-control" />
+        <span asp-validation-for="Input.Category" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Status"></label>
+        <input asp-for="Input.Status" class="form-control" />
+        <span asp-validation-for="Input.Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.AssigneeId"></label>
+        <input asp-for="Input.AssigneeId" class="form-control" />
+        <span asp-validation-for="Input.AssigneeId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.DueDate"></label>
+        <input asp-for="Input.DueDate" type="date" class="form-control" />
+        <span asp-validation-for="Input.DueDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Priority"></label>
+        <input asp-for="Input.Priority" class="form-control" />
+        <span asp-validation-for="Input.Priority" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Ticket</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

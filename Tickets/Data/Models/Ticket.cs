@@ -19,7 +19,7 @@
         public string? ReporterId { get; set; }
         public virtual ApplicationUser? Reporter { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public string? Priority { get; set; }
 
         public DateTime Created { get; set; } = DateTime.UtcNow;
