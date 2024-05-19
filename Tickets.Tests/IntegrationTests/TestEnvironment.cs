@@ -14,9 +14,11 @@ namespace Tickets.Tests.IntegrationTests
         private readonly ApplicationDbContext _identityDbContext;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationUser _testUser;
+        private readonly ApplicationUser _testUser2;
 
         public UserManager<ApplicationUser> UserManager => _userManager;
         public ApplicationUser TestUser => _testUser;
+        public ApplicationUser TestUser2 => _testUser2;
 
         public TestEnvironment()
         {
@@ -44,7 +46,8 @@ namespace Tickets.Tests.IntegrationTests
 
             _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            _testUser = CreateUserAsync().GetAwaiter().GetResult();
+            _testUser = CreateUserAsync("test@user.com", "TestUser", "Abc!23").GetAwaiter().GetResult();
+            _testUser2 = CreateUserAsync("test@user2.com", "TestUser2", "Abc!23").GetAwaiter().GetResult();
         }
 
         public ApplicationDbContext CreateContext()
@@ -55,12 +58,8 @@ namespace Tickets.Tests.IntegrationTests
             return new ApplicationDbContext(options);
         }
 
-        public async Task<ApplicationUser> CreateUserAsync()
+        public async Task<ApplicationUser> CreateUserAsync(string email, string userName, string password)
         {
-            var userName = "TestUser";
-            var email = "test@user.com";
-            var password = "Abc!23";
-
             var user = new ApplicationUser
             {
                 UserName = userName,

@@ -23,6 +23,12 @@ namespace Tickets.Data
             return ticket;
         }
 
+        public async Task<List<Ticket>> GetTicketsByReporterIdAsync(string reporterId)
+        {
+            var tickets = await _repository.GetByReporterIdAsync(reporterId);
+            return tickets;
+        }
+
         public async Task<Ticket?> AddTicketAsync(Ticket ticket)
         {
             var newTicket = await _repository.AddAsync(ticket);

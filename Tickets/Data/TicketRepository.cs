@@ -24,6 +24,14 @@ namespace Tickets.Data
             return ticket;
         }
 
+        public async Task<List<Ticket>> GetByReporterIdAsync(string reporterId)
+        {
+            var tickets = await _context.Tickets
+                .Where(t => t.ReporterId == reporterId)
+                .ToListAsync();
+            return tickets;
+        }
+
         public async Task<Ticket?> AddAsync(Ticket ticket)
         {
             var users = await _context.Users

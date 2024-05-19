@@ -60,6 +60,31 @@ namespace Tickets.Tests.UnitTests
 
             mockRepository.Verify(repo => repo.GetByIdAsync(ticketId), Times.Once);
         }
+        [Fact]
+        public async Task GetTicketsByReporterIdAsync_ReturnsTicketsForReporter()
+        {
+            var mockRepository = new Mock<ITicketRepository>();
+            var tickets = new List<Ticket>
+            {
+                new() { TicketId = 1, Summary = "Ticket 1", ReporterId = "1" },
+                new() { TicketId = 2, Summary = "Ticket 2", ReporterId = "1" },
+                new() { TicketId = 3, Summary = "Ticket 3", ReporterId = "2" },
+            };
+
+            mockRepository
+                .Setup(repo => repo.GetByReporterIdAsync("2"))
+                .ReturnsAsync(tickets.Where(t => t.ReporterId == "2").ToList());
+
+            var ticketService = new TicketService(mockRepository.Object);
+
+            var result = await ticketService.GetTicketsByReporterIdAsync("2");
+
+            Assert.NotNull(result);
+            Assert.Single(result);
+            Assert.Contains(result, t => t.Summary == "Ticket 3");
+
+            mockRepository.Verify(repo => repo.GetByReporterIdAsync("2"), Times.Once);
+        }
 
         [Fact]
         public async Task AddTicketAsync_CreatesNewTicket()

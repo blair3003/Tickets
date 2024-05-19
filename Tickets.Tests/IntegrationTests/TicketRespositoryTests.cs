@@ -106,6 +106,33 @@ namespace Tickets.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task GetByReporterIdAsync_ReturnsTicketsForReporter()
+        {
+            var tickets = new List<Ticket>
+            {
+                new() { TicketId = 11, Summary = "Ticket 11", ReporterId = _env.TestUser.Id },
+                new() { TicketId = 22, Summary = "Ticket 22", ReporterId = _env.TestUser.Id },
+                new() { TicketId = 33, Summary = "Ticket 33", ReporterId = _env.TestUser2.Id }
+            };
+
+            using (var context = _env.CreateContext())
+            {
+                context.Tickets.AddRange(tickets);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _env.CreateContext())
+            {
+                var repository = new TicketRepository(context);
+                var result = await repository.GetByReporterIdAsync(_env.TestUser2.Id);
+
+                Assert.NotNull(result);
+                Assert.True(result.Count == 1);
+                Assert.Contains(result, t => t.Summary == "Ticket 33");
+            }
+        }
+
+        [Fact]
         public async Task AddAsync_CreatesNewTicket()
         {
             var ticket = new Ticket
