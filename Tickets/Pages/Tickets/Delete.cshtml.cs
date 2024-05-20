@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Tickets.Data;
+using Tickets.Services;
 
 namespace Tickets.Pages.Tickets
 {

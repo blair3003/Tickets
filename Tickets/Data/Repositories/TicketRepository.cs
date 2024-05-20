@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tickets.Data.Models;
 
-namespace Tickets.Data
+namespace Tickets.Data.Repositories
 {
     public class TicketRepository : ITicketRepository
     {
@@ -20,7 +20,10 @@ namespace Tickets.Data
 
         public async Task<Ticket?> GetByIdAsync(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
+            var ticket = await _context.Tickets
+                .Include(t => t.Assignee)
+                .Include(t => t.Reporter)
+                .FirstOrDefaultAsync(m => m.TicketId == id);
             return ticket;
         }
 
@@ -39,7 +42,7 @@ namespace Tickets.Data
                 .ToListAsync();
 
             if (users.All(u => u.Id != ticket.ReporterId) ||
-                (ticket.AssigneeId != null && users.All(u => u.Id != ticket.AssigneeId)))
+                ticket.AssigneeId != null && users.All(u => u.Id != ticket.AssigneeId))
             {
                 return null;
             }
@@ -64,7 +67,7 @@ namespace Tickets.Data
                 .ToListAsync();
 
             if (users.All(u => u.Id != ticket.ReporterId) ||
-                (ticket.AssigneeId != null && users.All(u => u.Id != ticket.AssigneeId)))
+                ticket.AssigneeId != null && users.All(u => u.Id != ticket.AssigneeId))
             {
                 return null;
             }

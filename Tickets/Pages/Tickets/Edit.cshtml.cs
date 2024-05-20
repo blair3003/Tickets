@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Tickets.Data;
+using Microsoft.EntityFrameworkCore;
 using Tickets.Data.Models;
+using Tickets.Services;
 
 namespace Tickets.Pages.Tickets
 {
@@ -10,6 +12,7 @@ namespace Tickets.Pages.Tickets
     public class EditModel : PageModel
     {
         private readonly TicketService _ticketService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         [BindProperty(SupportsGet = true)]
         public int TicketId { get; set; }
@@ -17,9 +20,12 @@ namespace Tickets.Pages.Tickets
         [BindProperty]
         public UpdateTicketInput Input { get; set; } = new UpdateTicketInput();
 
-        public EditModel(TicketService ticketService)
+        public List<ApplicationUser> Users { get; set; } = [];
+
+        public EditModel(TicketService ticketService, UserManager<ApplicationUser> userManager)
         {
             _ticketService = ticketService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -31,13 +37,15 @@ namespace Tickets.Pages.Tickets
                 return NotFound();
             }
 
+            Users = await _userManager.Users.OrderBy(u => u.UserName).ToListAsync();
+
             Input = new UpdateTicketInput
             {
                 Summary = ticket.Summary,
                 Description = ticket.Description,
                 Category = ticket.Category,
                 Status = ticket.Status,
-                AssigneeId = ticket.AssigneeId,
+                AssigneeUserName = ticket.Assignee?.UserName,
                 DueDate = ticket.DueDate,
                 Priority = ticket.Priority
             };
@@ -59,11 +67,25 @@ namespace Tickets.Pages.Tickets
                 return NotFound();
             }
 
+            if (Input.AssigneeUserName != null)
+            {
+                var assignee = await _userManager.FindByNameAsync(Input.AssigneeUserName);
+
+                if (assignee != null)
+                {
+                    ticket.AssigneeId = assignee.Id;
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(Input.AssigneeUserName), "Invalid assignee username.");
+                    return Page();
+                }
+            }
+
             ticket.Summary = Input.Summary;
             ticket.Description = Input.Description;
             ticket.Category = Input.Category;
             ticket.Status = Input.Status;
-            ticket.AssigneeId = Input.AssigneeId;
             ticket.DueDate = Input.DueDate;
             ticket.Priority = Input.Priority;
 

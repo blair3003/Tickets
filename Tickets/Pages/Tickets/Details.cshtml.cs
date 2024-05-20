@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Tickets.Data.Models;
-using Tickets.Data;
 using Microsoft.AspNetCore.Authorization;
+using Tickets.Services;
 
 namespace Tickets.Pages.Tickets
 {

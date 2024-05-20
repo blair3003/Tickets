@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using Tickets.Data;
-using Tickets.Data.Models;
+﻿using Tickets.Data.Models;
+using Tickets.Data.Repositories;
 
 namespace Tickets.Tests.IntegrationTests
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Tickets.Data.Models
 {
@@ -14,23 +13,23 @@ namespace Tickets.Data.Models
         [Display(Name = "Description")]
         public string? Description { get; set; }
 
-        [StringLength(50, ErrorMessage = "Maximum length is {1}")]
+        [EnumDataType(typeof(Category), ErrorMessage = "Invalid Category option.")]
         [Display(Name = "Category")]
-        public string? Category { get; set; }
+        public Category? Category { get; set; }
 
-        [StringLength(50, ErrorMessage = "Maximum length is {1}")]
+        [EnumDataType(typeof(Status), ErrorMessage = "Invalid Status option.")]
         [Display(Name = "Status")]
-        public string? Status { get; set; }
+        public Status? Status { get; set; }
 
-        [Display(Name = "Assignee ID")]
-        public string? AssigneeId { get; set; }
+        [Display(Name = "Assignee")]
+        public string? AssigneeUserName { get; set; }
 
         [Display(Name = "Due Date")]
         [DataType(DataType.Date)]
         public DateTime? DueDate { get; set; }
 
-        [StringLength(20, ErrorMessage = "Maximum length is {1}")]
+        [EnumDataType(typeof(Priority), ErrorMessage = "Invalid Priority option.")]
         [Display(Name = "Priority")]
-        public string? Priority { get; set; }
+        public Priority? Priority { get; set; }
     }
 }

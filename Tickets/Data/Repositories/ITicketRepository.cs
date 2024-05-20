@@ -1,6 +1,6 @@
 ﻿using Tickets.Data.Models;
 
-namespace Tickets.Data
+namespace Tickets.Data.Repositories
 {
     public interface ITicketRepository
     {

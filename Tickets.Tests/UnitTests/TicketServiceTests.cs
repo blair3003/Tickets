@@ -1,11 +1,7 @@
 ﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tickets.Data;
 using Tickets.Data.Models;
+using Tickets.Data.Repositories;
+using Tickets.Services;
 
 namespace Tickets.Tests.UnitTests
 {

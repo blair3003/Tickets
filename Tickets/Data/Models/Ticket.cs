@@ -1,8 +1,7 @@
-﻿namespace Tickets.Data.Models
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
+namespace Tickets.Data.Models
+{
     public class Ticket
     {
         [Key]
@@ -10,20 +9,49 @@
 
         public string? Summary { get; set; }
         public string? Description { get; set; }
-        public string? Category { get; set; }
-        public string? Status { get; set; }
+        public Category? Category { get; set; }
+        public Status? Status { get; set; }
 
         public string? AssigneeId { get; set; }
-        public virtual ApplicationUser? Assignee { get; set; }
+        public ApplicationUser? Assignee { get; set; }
 
         public string? ReporterId { get; set; }
-        public virtual ApplicationUser? Reporter { get; set; }
+        public ApplicationUser? Reporter { get; set; }
 
         public DateTime? DueDate { get; set; }
-        public string? Priority { get; set; }
+        public Priority? Priority { get; set; }
 
         public DateTime Created { get; set; } = DateTime.UtcNow;
         public DateTime Updated { get; set; } = DateTime.UtcNow;
+    }
+
+    public enum Category
+    {
+        Account,
+        Network,
+        Software,
+        Hardware,
+        Other
+    }
+
+    public enum Status
+    {
+        New,
+        [Display(Name = "In Progress")]
+        InProgress,
+        [Display(Name = "On Hold")]
+        OnHold,
+        Resolved,
+        Closed
+    }
+
+    public enum Priority
+    {
+        Highest,
+        High,
+        Medium,
+        Low,
+        Lowest
     }
 
 }

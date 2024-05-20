@@ -1,6 +1,7 @@
 ﻿using Tickets.Data.Models;
+using Tickets.Data.Repositories;
 
-namespace Tickets.Data
+namespace Tickets.Services
 {
     public class TicketService
     {
