@@ -4,11 +4,21 @@
     ViewData["Title"] = $"Delete Ticket #{Model.TicketId}";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<p>Are you sure you want to delete this ticket?</p>
-
-<form method="post">
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-page="./Details" asp-route-TicketId="@Model.TicketId" class="btn btn-secondary">Cancel</a>
-</form>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group row">
+                    <p class="text-danger">Are you sure you want to delete this ticket?</p>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a asp-page="./Details" asp-route-TicketId="@Model.TicketId" class="btn btn-secondary ml-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

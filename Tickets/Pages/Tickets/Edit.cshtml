@@ -5,65 +5,84 @@
     ViewData["Title"] = $"Edit Ticket #{Model.TicketId}";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Input.Summary"></label>
-        <input asp-for="Input.Summary" class="form-control" />
-        <span asp-validation-for="Input.Summary" class="text-danger"></span>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group row mb-2">
+                    <label asp-for="Input.Summary" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Input.Summary" class="form-control" />
+                        <span asp-validation-for="Input.Summary" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label asp-for="Input.Description" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <textarea asp-for="Input.Description" class="form-control"></textarea>
+                        <span asp-validation-for="Input.Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label asp-for="Input.Category" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Input.Category" class="form-control" asp-items="Html.GetEnumSelectList<Category>()">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="Input.Category" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label asp-for="Input.Status" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Input.Status" class="form-control" asp-items="Html.GetEnumSelectList<Status>()">
+                            <option value="">-- Select Status --</option>
+                        </select>
+                        <span asp-validation-for="Input.Status" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label asp-for="Input.AssigneeUserName" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Input.AssigneeUserName" class="form-control">
+                            <option value="">-- Select Assignee --</option>
+                            @foreach (var user in Model.Users)
+                            {
+                                <option value="@user.UserName">@user.UserName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.AssigneeUserName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label asp-for="Input.DueDate" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Input.DueDate" type="date" class="form-control" />
+                        <span asp-validation-for="Input.DueDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label asp-for="Input.Priority" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Input.Priority" class="form-control" asp-items="Html.GetEnumSelectList<Priority>()">
+                            <option value="">Select Priority</option>
+                        </select>
+                        <span asp-validation-for="Input.Priority" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <div class="col-sm-9 offset-sm-3">
+                        <a asp-page="./Details" asp-route-TicketId="Model.TicketId" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary ml-2">Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Input.Description"></label>
-        <textarea asp-for="Input.Description" class="form-control"></textarea>
-        <span asp-validation-for="Input.Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Input.Category"></label>
-        <select asp-for="Input.Category" class="form-control" asp-items="Html.GetEnumSelectList<Category>()">
-            <option value="">-- Select Category --</option>
-        </select>
-        <span asp-validation-for="Input.Category" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Input.Status"></label>
-        <select asp-for="Input.Status" class="form-control" asp-items="Html.GetEnumSelectList<Status>()">
-            <option value="">Select Status</option>
-        </select>
-        <span asp-validation-for="Input.Status" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Input.AssigneeUserName"></label>
-        <select asp-for="Input.AssigneeUserName" class="form-control">
-            <option value="">-- Select Assignee --</option>
-            @foreach (var user in Model.Users)
-            {
-                <option value="@user.UserName">@user.UserName</option>
-            }
-        </select>
-        <span asp-validation-for="Input.AssigneeUserName" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Input.DueDate"></label>
-        <input asp-for="Input.DueDate" type="date" class="form-control" />
-        <span asp-validation-for="Input.DueDate" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Input.Priority"></label>
-        <select asp-for="Input.Priority" class="form-control" asp-items="Html.GetEnumSelectList<Priority>()">
-            <option value="">Select Priority</option>
-        </select>
-        <span asp-validation-for="Input.Priority" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

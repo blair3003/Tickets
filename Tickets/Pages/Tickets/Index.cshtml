@@ -4,26 +4,45 @@
     ViewData["Title"] = "Tickets";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<a asp-page="/Tickets/Create">New Ticket</a>
-
-<ul>
-    @foreach (var ticket in Model.Tickets)
-    {
-        <li>
-            <strong>TicketId:</strong> @ticket.TicketId <br />
-            <strong>Summary:</strong> @ticket.Summary <br />
-            <strong>Description:</strong> @ticket.Description <br />
-            <strong>Category:</strong> @ticket.Category <br />
-            <strong>Status:</strong> @ticket.Status <br />
-            <strong>AssigneeId:</strong> @ticket.AssigneeId <br />
-            <strong>ReporterId:</strong> @ticket.ReporterId <br />
-            <strong>DueDate:</strong> @ticket.DueDate <br />
-            <strong>Priority:</strong> @ticket.Priority <br />
-            <strong>Created:</strong> @ticket.Created <br />
-            <strong>Updated:</strong> @ticket.Updated <br />
-            <a asp-page="./Details" asp-route-TicketId="@ticket.TicketId">View Details</a>
-        </li>
-    }
-</ul>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+        </div>
+        <div class="card-body">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Ticket</th>
+                        <th style="width: 20%;">Summary</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Assignee</th>
+                        <th>Due Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in Model.Tickets)
+                    {
+                        <tr>
+                            <td># @ticket.TicketId</td>
+                            <td>@ticket.Summary</td>
+                            <td>@Html.DisplayFor(model => ticket.Category)</td>
+                            <td>@Html.DisplayFor(model => ticket.Status)</td>
+                            <td>@Html.DisplayFor(model => ticket.Priority)</td>
+                            <td>
+                                <span class="badge rounded-pill bg-primary">@ticket.Assignee?.UserName</span>
+                            </td>
+                            <td>@ticket.DueDate?.ToString("MMMM d, yyyy")</td>
+                            <td>
+                                <a asp-page="./Details" asp-route-TicketId="@ticket.TicketId" class="btn btn-primary btn-sm">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

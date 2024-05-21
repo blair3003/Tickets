@@ -20,3 +20,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.text-small {
+    font-size: 75%;
+}
+
+.text-truncate-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

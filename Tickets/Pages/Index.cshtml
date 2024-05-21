@@ -1,10 +1,21 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Tickets";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="h3 mb-0">Welcome to Tickets!</h1>
+        </div>
+        <div class="card-body">
+            <p>This application allows you to create tickets and manage them in a list. Admin users can see all tickets whereas normal users can only see tickets which they have created. Only admin users can update and delete tickets.</p>
+            <p class="lead">Get Started</p>
+            <div class="mt-4">
+                <a asp-page="/Tickets/Index" class="btn btn-lg btn-secondary mr-3">View Tickets</a>
+                <a asp-page="/Tickets/Create" class="btn btn-lg btn-primary">Add New Ticket</a>
+            </div>
+        </div>
+    </div>
 </div>

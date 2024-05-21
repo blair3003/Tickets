@@ -14,7 +14,9 @@ namespace Tickets.Data.Repositories
 
         public async Task<List<Ticket>> GetAllAsync()
         {
-            var allTickets = await _context.Tickets.ToListAsync();
+            var allTickets = await _context.Tickets
+                .Include(t => t.Assignee)
+                .ToListAsync();
             return allTickets;
         }
 
